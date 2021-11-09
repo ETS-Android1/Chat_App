@@ -22,7 +22,7 @@ public class SplashScreen extends AppCompatActivity {
 
         // Setting the splash screen image
         ImageView mImageView = findViewById(R.id.splashScreenIcon);
-        mImageView.setImageResource(R.drawable.chat);
+        mImageView.setImageResource(R.drawable.chat_app_icon);
         Animation iconAnimation = AnimationUtils.loadAnimation(SplashScreen.this,
                 R.anim.splash_screen_icon_animation);
         mImageView.startAnimation(iconAnimation);
