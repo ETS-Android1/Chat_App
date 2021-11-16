@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -27,21 +28,24 @@ public class PhoneVerification extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_verification);
-        // Setting title for action bar
+        // Set title for action bar
         setTitle("Your Phone");
         initialize();
 
         /*
-         * Setting the OnClickListener() for the floating action button
+         * Set the OnClickListener() for the floating action button
          * If the country code is valid then otp is sent
          * Else a toast is displayed for the invalid number.
          */
         fab.setOnClickListener(view -> {
             if (ccp.isValidFullNumber()) {
                 fab.setImageResource(0);
+                // Displaying progress bar and disable user interaction
                 mProgressBar.setVisibility(View.VISIBLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                // Sending the Otp using the PhoneAuthProvider
+                // Send the Otp using the PhoneAuthProvider
                 PhoneAuthProvider.getInstance().verifyPhoneNumber(
                         ccp.getFullNumberWithPlus(),
                         60, TimeUnit.SECONDS,
@@ -50,6 +54,7 @@ public class PhoneVerification extends AppCompatActivity {
                             @Override
                             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
                                 mProgressBar.setVisibility(View.GONE);
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 fab.setImageResource(R.drawable.ic_baseline_arrow_forward_24);
 
                                 /* TODO:
@@ -60,6 +65,7 @@ public class PhoneVerification extends AppCompatActivity {
                             @Override
                             public void onVerificationFailed(@NonNull FirebaseException e) {
                                 mProgressBar.setVisibility(View.GONE);
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 fab.setImageResource(R.drawable.ic_baseline_arrow_forward_24);
                                 Toast.makeText(PhoneVerification.this, e.getMessage(), Toast.LENGTH_SHORT)
                                         .show();
@@ -110,7 +116,7 @@ public class PhoneVerification extends AppCompatActivity {
         mEditText = findViewById(R.id.editTextPhoneNumber);
         mProgressBar = findViewById(R.id.phoneVerificationProgressBar);
 
-        // Registering the country code picker to work with the EditText
+        // Register the country code picker to work with the EditText
         ccp.registerCarrierNumberEditText(mEditText);
         fab = findViewById(R.id.fabPhoneVerification);
     }

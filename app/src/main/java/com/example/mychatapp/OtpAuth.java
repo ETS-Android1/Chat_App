@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -41,7 +42,7 @@ public class OtpAuth extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otp_auth);
-        // Setting title for action bar
+        // Set title for action bar
         setTitle("Otp verification");
         phoneNumber = getIntent().getStringExtra("phoneNumber");
         verificationCode = getIntent().getStringExtra("verificationCode");
@@ -60,7 +61,10 @@ public class OtpAuth extends AppCompatActivity {
 
             fab.setImageResource(0);
             mProgressBar.setVisibility(View.VISIBLE);
-            // Retrieving the OTP verification code entered by the user
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+            // Retrieve the OTP verification code entered by the user
             String retrievedCode = otpDigit1.getText().toString() +
                     otpDigit2.getText().toString() +
                     otpDigit3.getText().toString() +
@@ -76,6 +80,8 @@ public class OtpAuth extends AppCompatActivity {
         mResendCode.setOnClickListener(v->{
             fab.setImageResource(0);
             mProgressBar.setVisibility(View.VISIBLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
             PhoneAuthProvider.getInstance().verifyPhoneNumber(
                     phoneNumber,
@@ -85,6 +91,7 @@ public class OtpAuth extends AppCompatActivity {
                         @Override
                         public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
                             mProgressBar.setVisibility(View.GONE);
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             fab.setImageResource(R.drawable.ic_baseline_arrow_forward_24);
 
                             /* TODO:
@@ -95,6 +102,7 @@ public class OtpAuth extends AppCompatActivity {
                         @Override
                         public void onVerificationFailed(@NonNull FirebaseException e) {
                             mProgressBar.setVisibility(View.GONE);
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             fab.setImageResource(R.drawable.ic_baseline_arrow_forward_24);
                             Toast.makeText(OtpAuth.this, e.getMessage(), Toast.LENGTH_SHORT)
                                     .show();
@@ -104,6 +112,7 @@ public class OtpAuth extends AppCompatActivity {
                         public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                             super.onCodeSent(s, forceResendingToken);
                             mProgressBar.setVisibility(View.GONE);
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             fab.setImageResource(R.drawable.ic_baseline_arrow_forward_24);
                             // Setting the new verification code
                             verificationCode = s;
@@ -126,6 +135,7 @@ public class OtpAuth extends AppCompatActivity {
                             finish();
                         } else {
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 Toast.makeText(OtpAuth.this, "Please enter a valid OTP", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -185,7 +195,6 @@ public class OtpAuth extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.toString().trim().isEmpty()) otpDigit3.requestFocus();
-                else otpDigit1.requestFocus();
             }
 
             @Override
@@ -202,7 +211,6 @@ public class OtpAuth extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.toString().trim().isEmpty()) otpDigit4.requestFocus();
-                else otpDigit2.requestFocus();
             }
 
             @Override
@@ -219,7 +227,6 @@ public class OtpAuth extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.toString().trim().isEmpty()) otpDigit5.requestFocus();
-                else otpDigit3.requestFocus();
             }
 
             @Override
@@ -236,7 +243,6 @@ public class OtpAuth extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.toString().trim().isEmpty()) otpDigit6.requestFocus();
-                else otpDigit4.requestFocus();
             }
 
             @Override

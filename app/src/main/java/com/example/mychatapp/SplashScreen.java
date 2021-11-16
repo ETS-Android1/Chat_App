@@ -20,7 +20,7 @@ public class SplashScreen extends AppCompatActivity {
         getSupportActionBar().hide();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        // Setting the splash screen image
+        // Set the splash screen image
         ImageView mImageView = findViewById(R.id.splashScreenIcon);
         mImageView.setImageResource(R.drawable.chat_app_icon);
         Animation iconAnimation = AnimationUtils.loadAnimation(SplashScreen.this,
