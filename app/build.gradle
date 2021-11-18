@@ -43,7 +43,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:20.0.3'
     implementation 'com.google.firebase:firebase-firestore:24.0.0'
     implementation 'com.google.firebase:firebase-storage:20.0.0'
+    implementation 'com.firebaseui:firebase-ui-firestore:4.1.0'
 
     // android image cropper dependency
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+
+    // Picasso
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 }
