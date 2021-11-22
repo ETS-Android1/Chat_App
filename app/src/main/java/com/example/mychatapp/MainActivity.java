@@ -6,12 +6,13 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.mychatapp.models.UserFireStore;
+import com.example.mychatapp.models.UserFireStoreModel;
 import com.example.mychatapp.utilities.UserViewHolder;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -21,7 +22,7 @@ import com.google.firebase.firestore.Query;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FirestoreRecyclerAdapter<UserFireStore, UserViewHolder> chatAdapter;
+    private FirestoreRecyclerAdapter<UserFireStoreModel, UserViewHolder> chatAdapter;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
 
@@ -30,27 +31,32 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseAuth.getInstance();
         mRecyclerView = findViewById(R.id.usersRecyclerView);
         mLinearLayoutManager = new LinearLayoutManager(MainActivity.this);
 
+        // Fetching all users except the current user
         Query query = FirebaseFirestore.getInstance()
-                .collection("Users");
+                .collection("Users")
+                .whereNotEqualTo("uid", FirebaseAuth.getInstance().getUid());
 
-        FirestoreRecyclerOptions<UserFireStore> options = new FirestoreRecyclerOptions.Builder<UserFireStore>()
-                .setQuery(query, UserFireStore.class)
+        FirestoreRecyclerOptions<UserFireStoreModel> options = new FirestoreRecyclerOptions.Builder<UserFireStoreModel>()
+                .setQuery(query, UserFireStoreModel.class)
                 .build();
 
         // Firestore recycler adapter
-        chatAdapter = new FirestoreRecyclerAdapter<UserFireStore, UserViewHolder>(options) {
+        chatAdapter = new FirestoreRecyclerAdapter<UserFireStoreModel, UserViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull UserViewHolder mUserViewHolder, int i, @NonNull UserFireStore userFireStore) {
-                mUserViewHolder.setUsername(userFireStore.getUserName());
-                mUserViewHolder.setImage(MainActivity.this, userFireStore.getUserImage());
-                mUserViewHolder.setStatus(userFireStore.getStatus());
+            protected void onBindViewHolder(@NonNull UserViewHolder mUserViewHolder, int i, @NonNull UserFireStoreModel userFireStoreModel) {
+                mUserViewHolder.setUsername(userFireStoreModel.getUserName());
+                mUserViewHolder.setImage(MainActivity.this, userFireStoreModel.getUserImage());
+                mUserViewHolder.setStatus(userFireStoreModel.getStatus());
 
                 mUserViewHolder.itemView.setOnClickListener(v -> {
-
+                    Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                    intent.putExtra("receiverUid", userFireStoreModel.getUserName());
+                    intent.putExtra("userName", userFireStoreModel.getUserName());
+                    intent.putExtra("userImage", userFireStoreModel.getUserImage());
+                    startActivity(intent);
                 });
             }
 
@@ -63,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
                 return new UserViewHolder(view);
             }
         };
-
 
         mLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);

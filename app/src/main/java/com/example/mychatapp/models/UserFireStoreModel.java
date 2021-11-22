@@ -1,15 +1,15 @@
 package com.example.mychatapp.models;
 
-public class UserFireStore {
+public class UserFireStoreModel {
     private String userName;
     private String userImage;
     private String uid;
     private String status;
 
-    public UserFireStore() {
+    public UserFireStoreModel() {
     }
 
-    public UserFireStore(String userName, String userImage, String uid, String status) {
+    public UserFireStoreModel(String userName, String userImage, String uid, String status) {
         this.userName = userName;
         this.userImage = userImage;
         this.uid = uid;

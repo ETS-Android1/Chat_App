@@ -1,9 +1,12 @@
 package com.example.mychatapp.models;
 
-public class User {
+public class UserModel {
     private String userName, userUID;
 
-    public User(String userName, String userUID) {
+    public UserModel() {
+    }
+
+    public UserModel(String userName, String userUID) {
         this.userName = userName;
         this.userUID = userUID;
     }

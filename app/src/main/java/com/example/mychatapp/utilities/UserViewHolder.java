@@ -38,19 +38,7 @@ public class UserViewHolder extends RecyclerView.ViewHolder {
             Picasso.with(context)
                     .load(url)
                     .placeholder(R.drawable.user)
-                    .into(mChatContainerImage, new com.squareup.picasso.Callback() {
-                        @Override
-                        public void onSuccess() {
-                            mChatContainerImage.setPadding(0, 0, 0, 0);
-                        }
-
-                        @Override
-                        public void onError() {
-
-                        }
-                    });
-
-
+                    .into(mChatContainerImage);
         }
     }
 

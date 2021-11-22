@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.mychatapp.models.User;
+import com.example.mychatapp.models.UserModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -106,9 +106,9 @@ public class CreateProfile extends AppCompatActivity {
         DatabaseReference reference = FirebaseDatabase.getInstance()
                 .getReference(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()));
 
-        User user = new User(userName, FirebaseAuth.getInstance().getUid());
+        UserModel userModel = new UserModel(userName, FirebaseAuth.getInstance().getUid());
         // Adding user to DB
-        reference.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+        reference.setValue(userModel).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.v("Add User", "User Added successfully to real-time DB");
