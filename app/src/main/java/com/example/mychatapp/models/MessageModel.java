@@ -1,19 +1,23 @@
 package com.example.mychatapp.models;
 
+import java.util.Date;
+
 public class MessageModel {
-    String message;
-    String senderId;
-    long timestamp;
-    String currentTime;
+    private String message;
+    private String senderId;
+    private String receiverId;
+    private String timestamp;
+    private Date date;
 
     public MessageModel() {
     }
 
-    public MessageModel(String message, String senderId, long timestamp, String currentTime) {
+    public MessageModel(String message, String senderId, String receiverId, String time, Date date) {
         this.message = message;
         this.senderId = senderId;
-        this.timestamp = timestamp;
-        this.currentTime = currentTime;
+        this.receiverId = receiverId;
+        this.timestamp = time;
+        this.date = date;
     }
 
     public String getMessage() {
@@ -32,19 +36,27 @@ public class MessageModel {
         this.senderId = senderId;
     }
 
-    public long getTimestamp() {
+    public String getReceiverId() {
+        return receiverId;
+    }
+
+    public void setReceiverId(String receiverId) {
+        this.receiverId = receiverId;
+    }
+
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
-    public String getCurrentTime() {
-        return currentTime;
+    public Date getDate() {
+        return date;
     }
 
-    public void setCurrentTime(String currentTime) {
-        this.currentTime = currentTime;
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

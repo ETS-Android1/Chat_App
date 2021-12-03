@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
                 mUserViewHolder.itemView.setOnClickListener(v -> {
                     Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-                    intent.putExtra("receiverUid", userFireStoreModel.getUserName());
+                    intent.putExtra("receiverUid", userFireStoreModel.getUid());
                     intent.putExtra("userName", userFireStoreModel.getUserName());
                     intent.putExtra("userImage", userFireStoreModel.getUserImage());
                     startActivity(intent);
