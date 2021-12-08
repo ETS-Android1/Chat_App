@@ -17,13 +17,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.mychatapp.models.UserModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -88,37 +85,16 @@ public class CreateProfile extends AppCompatActivity {
     }
 
     private void sendDataForNewUser() {
-        sendDataToRealtimeDB();
-        if (imageData != null) {
-            sendImageToFirebaseStorage();
-        } else {
-            sendDataToFirebaseFirestore();
-        }
-    }
-
-    private void sendDataToRealtimeDB() {
         userName = mFirstName.getText().toString().trim();
         if (!mLastName.getText().toString().trim().isEmpty()) {
             userName += " " + mLastName.getText().toString().trim();
         }
 
-        // Get the instance of Firebase Realtime DB
-        DatabaseReference reference = FirebaseDatabase.getInstance()
-                .getReference(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()));
-
-        UserModel userModel = new UserModel(userName, FirebaseAuth.getInstance().getUid());
-        // Adding user to DB
-        reference.setValue(userModel).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.v("Add User", "User Added successfully to real-time DB");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("Add User", "Add User unsuccessfully to real-time DB");
-            }
-        });
+        if (imageData != null) {
+            sendImageToFirebaseStorage();
+        } else {
+            sendDataToFirebaseFirestore();
+        }
     }
 
     private synchronized void sendImageToFirebaseStorage() {

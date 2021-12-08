@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.mychatapp.models.UserFireStoreModel;
+import com.example.mychatapp.models.UserModel;
 import com.example.mychatapp.utilities.UserViewHolder;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -22,7 +22,7 @@ import com.google.firebase.firestore.Query;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FirestoreRecyclerAdapter<UserFireStoreModel, UserViewHolder> chatAdapter;
+    private FirestoreRecyclerAdapter<UserModel, UserViewHolder> chatAdapter;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
 
@@ -39,23 +39,23 @@ public class MainActivity extends AppCompatActivity {
                 .collection("Users")
                 .whereNotEqualTo("uid", FirebaseAuth.getInstance().getUid());
 
-        FirestoreRecyclerOptions<UserFireStoreModel> options = new FirestoreRecyclerOptions.Builder<UserFireStoreModel>()
-                .setQuery(query, UserFireStoreModel.class)
+        FirestoreRecyclerOptions<UserModel> options = new FirestoreRecyclerOptions.Builder<UserModel>()
+                .setQuery(query, UserModel.class)
                 .build();
 
         // Firestore recycler adapter
-        chatAdapter = new FirestoreRecyclerAdapter<UserFireStoreModel, UserViewHolder>(options) {
+        chatAdapter = new FirestoreRecyclerAdapter<UserModel, UserViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull UserViewHolder mUserViewHolder, int i, @NonNull UserFireStoreModel userFireStoreModel) {
-                mUserViewHolder.setUsername(userFireStoreModel.getUserName());
-                mUserViewHolder.setImage(MainActivity.this, userFireStoreModel.getUserImage());
-                mUserViewHolder.setStatus(userFireStoreModel.getStatus());
+            protected void onBindViewHolder(@NonNull UserViewHolder mUserViewHolder, int i, @NonNull UserModel userModel) {
+                mUserViewHolder.setUsername(userModel.getUserName());
+                mUserViewHolder.setImage(MainActivity.this, userModel.getUserImage());
+                mUserViewHolder.setStatus(userModel.getStatus());
 
                 mUserViewHolder.itemView.setOnClickListener(v -> {
                     Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-                    intent.putExtra("receiverUid", userFireStoreModel.getUid());
-                    intent.putExtra("userName", userFireStoreModel.getUserName());
-                    intent.putExtra("userImage", userFireStoreModel.getUserImage());
+                    intent.putExtra("receiverUid", userModel.getUid());
+                    intent.putExtra("userName", userModel.getUserName());
+                    intent.putExtra("userImage", userModel.getUserImage());
                     startActivity(intent);
                 });
             }
